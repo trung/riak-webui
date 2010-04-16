@@ -56,9 +56,17 @@
 }
 
 table.display thead th {
+	vertical-align: middle;
 	padding: 3px 0px 3px 10px;
 	cursor: pointer;
 	* cursor: hand;
+}
+
+.css_right {
+float:right;
+}
+.css_left {
+float:left;
 }
 
 
