@@ -33,7 +33,7 @@ allowed_methods(ReqData, Context) ->
     {['GET', 'POST'], ReqData, Context}.
 
 file_path(Context, []) ->
-	file_path(Context#context{metadata=[{'content-type', 'text/html'}|Context#context.metadata]}
+	file_path(Context#context{metadata=[{'content-type', 'text/html'}]}
 		, ["index.html"]);
 
 file_path(Context, Name) ->
