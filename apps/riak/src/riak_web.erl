@@ -62,7 +62,8 @@ dispatch_table() ->
         mapred_resource, MapredProps},
        {[proplists:get_value(prefix, StatsProps)],
         stats_http_resource, StatsProps},
-       {["ping"], ping_http_resource, []}]).
+       {["ping"], ping_http_resource, []},
+	   {["webui", '*'], webui_resource, [{root, "www/"}]}]).
 
 raw_dispatch() ->
     case riak:get_app_env(raw_name) of

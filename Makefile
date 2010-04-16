@@ -20,6 +20,9 @@ test:
 rel:
 	./rebar compile generate 
 
+relui:
+	cp -rf webui/* rel/riak/www/
+
 relclean:
 	rm -rf rel/riak
 

@@ -64,7 +64,8 @@
              slide,
              spiraltime,
              stats_http_resource,
-             vclock
+             vclock,
+			 webui_resource
             ]},
   {applications, [
                   kernel,

@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<script src="js/jquery-1.4.2.min.js" type="text/javascript"></script> 
+	<script src="js/jquery-ui-1.8.custom.min.js" type="text/javascript"></script>
+	<script src="js/jquery.xdomainajax.js" type="text/javascript"></script>
+	
+	<link rel="stylesheet" href="css/ui-darkness/jquery-ui-1.8.custom.css" type="text/css" media="all" /> 
+	<link href="css/zp-compressed.css" type="text/css" media="screen, print" rel="stylesheet" />
+	<link href="css/zp-print.css" type="text/css" media="print" rel="stylesheet" />
+
+	<!--[if IE]>
+	<link href="css/zp-ie.css" type="text/css" media="screen" rel="stylesheet" />
+	<![endif]-->
+	<title>RIAK Admin UI</title>
+	<script type="text/javascript">
+		$(function() {
+			//$("#tabs").tabs();
+			$("#retrieve_btn").click(function(){
+				var url = $('#riak_server').val() + "/" + $('#bucket').val();
+				$.ajax({url: url, success: function(data, textStatus, xhr){
+					$('#msg').removeClass("error");
+					$('#msg').removeClass("notice");
+					$('#msg').addClass("notice");
+					$('#msg').text('Success');
+
+					$.each(data.keys, function(id){
+						$('#content').append(data.keys[id] + "<br/>");
+					
+					})	
+				}});
+			});
+		});
+	</script>
+</head>
+
+<body>
+<div class="zp-wrapper">
+	<h1>RIAK Admin UI</h1>
+	<hr class="clear"/>
+	<div id="msg" class="notification"></div>
+	<div class="form-item">
+		<label for="riak_server">Riak Context</label>
+		<input tabindex="1" id="riak_server" type="text" name="riak_server" value="/riak"/>	
+	</div>
+	<div class="form-item">
+		<label for="bucket">Bucket</label>
+		<input tabindex="2" id="bucket" name="bucket" type="text" value="article">
+	</div>
+	<button id="retrieve_btn">Retrieve</button>
+	<div id="content" class="zp-wrapper">
+		
+	</div>
+</div>
+</body>
+</html>
