@@ -23,23 +23,58 @@
 			//$("#tabs").tabs();
 			keysTable = $('#keysTable').dataTable({
 				"bJQueryUI": true,
-				"sPaginationType": "full_numbers"
+				"sPaginationType": "full_numbers",
+				"bAutoWidth": false,
+				"aoColumns" : [
+				    { sWidth: '1%', bSortable: false, sClass: 'center' },
+					{ sWidth: '99%' }
+				]
 			});
+			$('#check_all').click( function() {
+				var checked = this.checked;
+				$('input', keysTable.fnGetNodes()).each(function() {
+					$(this).attr('checked',checked);
+					var tr = $(this).parent().parent();
+					if (checked) {
+						$(tr).addClass("row_selected");
+					} else {
+						$(tr).removeClass("row_selected");
+					}
+				});
+			});
+			
 			$("#retrieve_btn").click(function(){
 				keysTable.fnClearTable();
-				var url = $('#riak_server').val() + "/" + $('#bucket').val();
+				$('#msg').removeClass("error");
+				$('#msg').removeClass("notice");
+				$('#msg').text('');
+				var url = $('#riak_server').val() + "/" + $('#bucket').val() + "?props=false";
 				$.ajax({url: url, success: function(data, textStatus, xhr){
-					$('#msg').removeClass("error");
-					$('#msg').removeClass("notice");
-					$('#msg').addClass("notice");
-					$('#msg').text('Success');
+					if (data.keys == undefined) {
+						$('#msg').addClass("error");
+						$('#msg').text('Failed. Data has no keys');
+						return;
+					} else {
+						$('#msg').addClass("notice");
+						$('#msg').text('Success');						
+					}
 
 					$.each(data.keys, function(id){
 						keysTable.fnAddData([
-							"",
+							"<input type='checkbox' />",
 							data.keys[id]
 							]);
-					})
+					});
+					
+					$('input', keysTable.fnGetNodes()).click(function(){
+						var tr = $(this).parent().parent();
+						//var pos = keysTable.fnGetPosition(tr);
+						if (this.checked) {
+							$(tr).addClass("row_selected");
+						} else {
+							$(tr).removeClass("row_selected");
+						}
+					});
 				
 				}});
 			});
@@ -65,7 +100,7 @@
 	<table cellpadding="0" cellspacing="0" border="0" class="display" id="keysTable"> 
 		<thead> 
 			<tr> 
-				<th style="width:20px"></th> 
+				<th style="width:20px"><input type="checkbox" id="check_all" name="check_all"/></th> 
 				<th>Keys</th> 
 			</tr> 
 		</thead>
