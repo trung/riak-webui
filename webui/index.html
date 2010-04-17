@@ -21,6 +21,7 @@
 	<title>RIAK Admin UI</title>
 	<script type="text/javascript">
 		var keysTable;
+		var bucket_url;
 		$(function() {
 			//$("#tabs").tabs();
 			$("#dialog").dialog("destroy");
@@ -47,28 +48,34 @@
 			});
 			
 			$("#delete_btn").click(function(){
+				var selectedRows = $("#keysTable tbody tr.row_selected");
+				if ($(selectedRows).length == 0) {
+					// nothing to delete
+					return false;
+				}
 				 // create confirmation
-				var dialog="<div class='zp-wrapper'><div id='confirmation' title='Confirmation'>"
+				var dialog="<div id='confirmation' title='Confirmation'>"
 					+ "<p>Are you sure to delete the selected keys?</p>"
-					+ "</div></div>";
+					+ "</div>";
 				$("#main").append(dialog);
 				$("#confirmation").dialog({
 					resizable: false,
-					height:120,
+					height: 140,
 					width: 320,
 					modal: true,
 					closeOnEscape: false,
 					open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }, // remove close button
 					buttons: {
 						'Delete all items': function() {
-							delete_keys();
+							delete_keys(selectedRows);
 							$(this).dialog("option", "title", "Executing")
 							$(this).dialog( "option" , "buttons" , []);
 							$(this).dialog( "option" , "height", 85);	
 							//$(this).dialog('disable');
 						},
 						'Cancel': function() {
-							$(this).dialog('close');
+							$("#confirmation").dialog('destroy');
+							$("#confirmation").remove();
 						}
 					}
 				});
@@ -79,7 +86,8 @@
 				$('#msg').removeClass("error");
 				$('#msg').removeClass("notice");
 				$('#msg').text('');
-				var url = $('#riak_server').val() + "/" + $('#bucket').val() + "?props=false";
+				bucket_url = $('#riak_server').val() + "/" + $('#bucket').val();
+				var url = bucket_url + "?props=false";
 				$.ajax({url: url, success: function(data, textStatus, xhr){
 					if (data.keys == undefined) {
 						$('#msg').addClass("error");
@@ -111,10 +119,39 @@
 			});
 		});
 		
-		function delete_keys() {
-			$("#confirmation").html("Deleting ...<br/><div id='progressbar'></div>");
+		function delete_keys(selectedRows) {			
+			var total = $(selectedRows).length;
+			var count = 0;
+			$("#confirmation").html("Deleting " + total + " keys...<br/><div id='progressbar'></div>");
 			$("#progressbar").progressbar({
 						value: 0
+			});
+			// get all keys from table and delete one by one sync
+			$(selectedRows).each(function(){
+				var tr = this;
+				var pos = keysTable.fnGetPosition(tr);
+				var data = keysTable.fnGetData(pos);
+				var key = data[1];
+				$.ajax({
+					type: 'DELETE', 
+					aysnc: false, 
+					url: bucket_url + "/" + key,
+					success: function(result) {
+						keysTable.fnDeleteRow(pos);
+						$(tr).removeClass("row_selected");
+						count++;
+						$("#progressbar").progressbar("value", count*100/total);
+						if (count == total) {
+							$("#confirmation").html("Done!!")
+							$("#confirmation").dialog("option", "title", "Completed");
+							$("#confirmation").dialog("option", "height", 85);
+							$("#confirmation").dialog("option", "buttons", {OK: function() {
+								$("#confirmation").dialog('destroy');
+								$("#confirmation").remove();
+							}});
+						}
+					}
+				});
 			});
 		}
 	</script>
