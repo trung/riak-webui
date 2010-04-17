@@ -1,5 +1,10 @@
 #+SETUPFILE: "doc/basho-doc-style.iorg"
 
+* WEB UI for RIAK
+
+I put some hacks to provide web admin ui for Riak. This patch works with Riak 0.9.1 only.
+
+
 Welcome to Riak.
 
 * Overview
