@@ -30,8 +30,8 @@
 				"sPaginationType": "full_numbers",
 				"bAutoWidth": false,
 				"aoColumns" : [
-				    { sWidth: '1%', bSortable: false, sClass: 'center' },
-					{ sWidth: '99%' }
+				    { sWidth: '1%', bSortable: false, sClass: 'center', bSearchable: false },
+					{ sWidth: '99%', sClass: 'clickable' }
 				]
 			});
 			$('#check_all').click( function() {
@@ -45,6 +45,12 @@
 						$(tr).removeClass("row_selected");
 					}
 				});
+			});
+			// handle clickable keys
+			$("#keysTable tbody tr td.clickable").click(function(){
+				var url = "http://" + document.domain + bucket_url + "/" + $(this).text();
+				window.open(url);
+				return false;
 			});
 			
 			$("#delete_btn").click(function(){

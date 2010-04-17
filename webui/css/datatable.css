@@ -69,6 +69,10 @@ float:right;
 float:left;
 }
 
+.clickable {
+	cursor: pointer;
+	* cursor: hand;
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
