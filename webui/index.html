@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="css/smoothness/jquery-ui-1.8.custom.css" type="text/css" media="all" /> 
 	
 	<link href="css/base/jquery.ui.all.css" type="text/css" media="all" rel="stylesheet" />
+	<link href="css/riak-webui.css" type="text/css" media="all" rel="stylesheet" />
 	<link href="css/datatable.css" type="text/css" media="all" rel="stylesheet" />
 	<link href="css/zp-compressed.css" type="text/css" media="screen, print" rel="stylesheet" />
 	<link href="css/zp-print.css" type="text/css" media="print" rel="stylesheet" />
@@ -24,7 +25,10 @@
 		var bucket_url;
 		$(function() {
 			//$("#tabs").tabs();
+			$("#msg").hide();
+			$("button").button();
 			$("#dialog").dialog("destroy");
+			$("#navigation").accordion();
 			keysTable = $('#keysTable').dataTable({
 				"bJQueryUI": true,
 				"sPaginationType": "full_numbers",
@@ -89,6 +93,7 @@
 				bucket_url = $('#riak_server').val() + "/" + $('#bucket').val();
 				var url = bucket_url + "?props=false";
 				$.ajax({url: url, success: function(data, textStatus, xhr){
+					$("#msg").show();
 					if (data.keys == undefined) {
 						$('#msg').addClass("error");
 						$('#msg').text('Failed. Data has no keys');
@@ -148,7 +153,7 @@
 						count++;
 						$("#progressbar").progressbar("value", count*100/total);
 						if (count == total) {
-							$("#confirmation").html("Done!!")
+							$("#confirmation").html("Done!!");
 							$("#confirmation").dialog("option", "title", "Completed");
 							$("#confirmation").dialog("option", "height", 85);
 							$("#confirmation").dialog("option", "buttons", {OK: function() {
@@ -167,11 +172,26 @@
 <div id="main" class="zp-wrapper">
 	<h1>RIAK Admin UI</h1>
 	<hr class="clear"/>
-	<div id="msg" class="notification"></div>
-	<div class="form-item">
-		<label for="riak_server">Riak Context</label>
+	<div class="zp-20">
+		<h2>Riak Context</h2>
 		<input tabindex="1" id="riak_server" type="text" name="riak_server" value="/riak"/>	
+		<h2>Navigation</h2>
+		<div id="navigation">
+			<h3><a href="#">Bucket Operations</a></h3>
+			<div>
+				<a href="#">Bucket props</a>
+			</div>
+			<h3><a href="#">Object/key Operations</a></h3>
+			<div>
+			</div>
+			<h3><a href="#">Query Operations</a></h3>
+			<div>
+			</div>
+		</div>
+		<h2>Server Stats</h2>
 	</div>
+	<div class="zp-80 content"><div class="padding-left">
+	<div id="msg" class="notification"></div>
 	<div class="form-item">
 		<label for="bucket">Bucket</label>
 		<input tabindex="2" id="bucket" name="bucket" type="text" value="article">
@@ -191,6 +211,7 @@
 			
 		</tbody>
 	</table>
+	</div></div>
 </div>
 </body>
 </html>
