@@ -4,12 +4,24 @@ var keysTable;
 // url for current bucket
 var bucket_url;
 
+var lastUpdate = 1;
+
 $(function() {
 	$("#msg").hide();
 	$("button").button();
 	$("#dialog").dialog("destroy");
 	// $("#navigation").accordion();
 	slide("#sliding-navigation", 25, 15, 150, .8);
+	// timer to update server status
+	$("#last-update").everyTime(5000, function() {
+		lastUpdate++;
+		$(this).text(lastUpdate*5 + " sec");
+	});
+	$("#server-stats").everyTime(10000, function() {
+		lastUpdate = -1;
+		checkStatus("#ping-status", "/ping");
+		checkStatus("#test-bucket-status", $("#riak_server").val() + "/test");
+	});
 
 	keysTable = $('#keysTable').dataTable({
 		"bJQueryUI": true,
@@ -110,6 +122,17 @@ $(function() {
 		}});
 	});
 });
+
+function checkStatus(status_id, url) {
+	$(status_id).addClass("ui-icon-refresh");
+	$(status_id).removeClass("ui-icon-circle-check");
+	$(status_id).removeClass("ui-icon-alert");
+	
+	$.ajax({url: url, success: function(result){
+		$(status_id).removeClass("ui-icon-refresh");
+		$(status_id).addClass("ui-icon-circle-check");
+	}});
+}
 
 // for slide navigation
 function slide(navigation_id, pad_out, pad_in, time, multiplier)
