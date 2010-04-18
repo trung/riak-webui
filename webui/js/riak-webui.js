@@ -23,6 +23,11 @@ $(function() {
 		checkStatus("#test-bucket-status", $("#riak_server").val() + "/test");
 	});
 
+	$("#full-server-stats-btn").click(function(){
+		window.open("http://" + window.location.host + "/stats");
+		return false;
+	});
+
 	keysTable = $('#keysTable').dataTable({
 		"bJQueryUI": true,
 		"sPaginationType": "full_numbers",
