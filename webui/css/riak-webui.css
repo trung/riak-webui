@@ -1,3 +1,31 @@
 .content .padding-left {
 	padding:0 0 0 50px;
 }
+
+ul#sliding-navigation
+{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul#sliding-navigation li.sliding-element {
+	border-bottom: 1px solid #999;	
+}
+
+ul#sliding-navigation li.sliding-element a
+{
+	display: block;
+	padding: 3px 18px;
+	margin: 0;
+}
+
+ul#sliding-navigation li.sliding-element a
+{
+	color: #666;
+	text-decoration: none;
+}
+
+ul#sliding-navigation li.sliding-element a:hover { 
+	color: #333; 
+}
