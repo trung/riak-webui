@@ -38,6 +38,22 @@
 			<li class="sliding-element"><a href="#">MapReduce</a></li>
 		</ul>
 		<h2>Server Stats</h2>
+		<div class="ui-widget">
+			<div class="ui-state-highlight ui-corner-all" style="padding: 5px; margin-bottom: 10px"> 
+				<span class="small-text"><em>Last update <span id="last-update">2 min ago.</span></em> <a href="#">Update now</a></span>
+			</div>
+		</div>
+		<ul id="server-stats">
+			<li>
+				<div class="left">Ping</div>
+				<span id="ping-status" class="ui-icon ui-icon-circle-check right"></span>
+			</li>
+			<li>
+				<div class="left">Test Bucket</div>
+				<span id="test-bucket-status" class="ui-icon ui-icon-circle-check right"></span>
+			</li>
+		</ul>
+		<button id="full-server-stats-btn">Full Stats</button>
 	</div>
 	<div class="zp-80 content"><div class="padding-left">
 	<div id="msg" class="notification"></div>

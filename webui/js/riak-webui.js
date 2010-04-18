@@ -1,7 +1,10 @@
+// datatable to display all keys
 var keysTable;
+
+// url for current bucket
 var bucket_url;
+
 $(function() {
-	//$("#tabs").tabs();
 	$("#msg").hide();
 	$("button").button();
 	$("#dialog").dialog("destroy");
@@ -108,6 +111,7 @@ $(function() {
 	});
 });
 
+// for slide navigation
 function slide(navigation_id, pad_out, pad_in, time, multiplier)
 {
 	// creates the target paths
